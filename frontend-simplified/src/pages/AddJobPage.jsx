@@ -27,15 +27,19 @@ const AddJobPage = () => {
   //   return;
   // };
 
+  const user = JSON.parse(localStorage.getItem("user"))
+  const token = user ? user.token : null
   const addJob = async (newJob) => {
     try {
       const res = await fetch("/api/jobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newJob),
       });
+
       if (!res.ok) {
         throw new Error("Failed to add job");
       }

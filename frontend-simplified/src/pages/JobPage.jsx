@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
-const JobPage = () => {
+const JobPage = ({ isAuthenticated }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [job, setJob] = useState(null);
@@ -18,11 +18,16 @@ const JobPage = () => {
   //   });
   //   return;
   // };
+  const user = JSON.parse(localStorage.getItem("user"))
+  const token = user ? user.token : null
 
   const deleteJob = async (id) => {
     try {
       const res = await fetch(`/api/jobs/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
       if (!res.ok) {
         throw new Error("Failed to delete job");
@@ -32,7 +37,6 @@ const JobPage = () => {
       toast.error("Failed to delete the job");
     }
   };
-  
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -135,6 +139,12 @@ const JobPage = () => {
                   {job.company.contactPhone}
                 </p>
               </div>
+              {isAuthenticated && (
+                <>
+                  <button onClick={() => navigate(`/edit-book/${book._id}`)}>Edit</button>
+                  <button onClick={() => onDeleteClick(book._id)}>Delete</button>
+                </>
+              )}
 
               <div className="bg-white p-6 rounded-lg shadow-md mt-6">
                 <h3 className="text-xl font-bold mb-6">Manage Job</h3>

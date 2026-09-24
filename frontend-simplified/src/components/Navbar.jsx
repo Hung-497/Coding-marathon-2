@@ -2,7 +2,12 @@ import { NavLink } from 'react-router-dom';
 import logo from '../assets/images/logo.png'
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+  const handleClick = () => {
+    localStorage.removeItem("user");  // 1. delete the token from storage
+    setIsAuthenticated(false);         // 2. update React state → re-render
+  };
+
   const linkClass = ({ isActive }) =>
     isActive
       ? 'bg-black text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
@@ -10,6 +15,14 @@ const Navbar = () => {
 
   return (
     <nav className='bg-indigo-700 border-b border-indigo-500'>
+      {isAuthenticated && (
+        <div>
+          <span>Welcome</span>
+          <button onClick={handleClick}>Log out</button>
+        </div>
+      )}
+
+
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
         <div className='flex h-20 items-center justify-between'>
           <div className='flex flex-1 items-center justify-center md:items-stretch md:justify-start'>
@@ -30,8 +43,12 @@ const Navbar = () => {
                 <NavLink to='/add-job' className={linkClass}>
                   Add Job
                 </NavLink>
-                <Link to="/login" className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">Login</Link>
-                <Link to="/signup" className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">Signup</Link>
+                {!isAuthenticated && (
+                  <div>
+                    <Link to="/login" className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">Login</Link>
+                    <Link to="/signup" className="text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2">Signup</Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

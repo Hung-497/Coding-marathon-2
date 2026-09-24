@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signup = ({setIsAuthenticated}) => {
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -15,11 +15,13 @@ const Signup = () => {
     const [error, setError] = useState(null);
 
     const address = {
-                   "street": street,
-                   "city": city,
-                   "zipCode": zipCode
-                };
-    const handleFormSubmit = async (e) => {
+        "street": street,
+        "city": city,
+        "zipCode": zipCode
+    };
+
+
+    const handleSignup = async (e) => {
         e.preventDefault();
         setError(null);
         const response = await fetch("/api/users/signup", {
@@ -35,23 +37,23 @@ const Signup = () => {
                 address: address
             })
         });
-        const user = await response.json();
 
-        if (!response.ok) {
-            setError(user.error);
-            return;
+
+        if (response.ok) {
+            const user = await response.json();
+            localStorage.setItem("user", JSON.stringify(user));
+            console.log("User signed up successfully!");
+            setIsAuthenticated(true);
+            navigate("/");
+        } else {
+            console.error("Signup failed");
         }
-
-        localStorage.setItem("user", JSON.stringify(user));
-        console.log("success");
-
-        navigate("/");
     };
 
     return (
         <div className="create">
             <h2>Sign Up</h2>
-            <form onSubmit={handleFormSubmit}>
+       
                 <label>Name:</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
                 <label>Email address:</label>
@@ -71,8 +73,8 @@ const Signup = () => {
                 <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
                 <label>Zip code</label>
                 <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
-                <button>Sign up</button>
-            </form>
+                <button onClick={handleSignup}>Sign up</button>
+        
         </div>
     );
 };

@@ -17,8 +17,8 @@ router.get("/:id", getJobById);
 // post a new job
 router.post("/", requireAuth, addJob);
 
-// patch a job
-router.patch("/:id", requireAuth, updateJobById);
+// put a job
+router.put("/:id", requireAuth, updateJobById);
 
 // delete a job
 router.delete("/:id", requireAuth, deleteJobById);

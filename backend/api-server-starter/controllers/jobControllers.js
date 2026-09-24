@@ -76,7 +76,8 @@ const deleteJobById = async (req, res) => {
 
 // update job by id
 const updateJobById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params;    
+  // console.log(Job.findById({_id:id}));
   try {
     const updatedJob = await Job.findOneAndUpdate(
       { _id:id },
@@ -84,7 +85,7 @@ const updateJobById = async (req, res) => {
       { new: true },
     );
     if (!updatedJob) {
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({ message: "Job not found"});
     }
     res.status(200).json(updatedJob);
   } catch (error) {

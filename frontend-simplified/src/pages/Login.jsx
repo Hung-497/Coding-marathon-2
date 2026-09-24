@@ -5,9 +5,27 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(null);
+
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
+
+        const response = await fetch("/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+        const user = await response.json();
+
+        if (!response.ok) {
+            setError(user.error);
+            return;
+        }
+
+        localStorage.setItem("user", JSON.stringify(user));
+        console.log("success");
         navigate("/");
     };
 
@@ -18,12 +36,12 @@ const Login = () => {
                 <form onSubmit={handleFormSubmit}>
                     <div className="mb-4">
                         <label htmlFor="type" className="block text-gray-700 font-bold mb-2 ">Email address:</label>
-                        <input className = "border rounded w-full py-2 px-3" placeholder= "Enter your email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input className="border rounded w-full py-2 px-3" placeholder="Enter your email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="mb-4">
                         <label htmlFor="type" className="block text-gray-700 font-bold mb-2">Password:</label>
-                        <input className = "border rounded w-full py-2 px-3" placeholder= "Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>    
+                        <input className="border rounded w-full py-2 px-3" placeholder="Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    </div>
                     <button >Log in </button>
                 </form>
             </div>

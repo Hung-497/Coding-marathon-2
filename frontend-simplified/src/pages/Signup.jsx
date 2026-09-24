@@ -12,10 +12,39 @@ const Signup = () => {
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
     const [zipCode, setZipCode] = useState("");
+    const [error, setError] = useState(null);
 
-
+    const address = {
+                   "street": street,
+                   "city": city,
+                   "zipCode": zipCode
+                };
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
+        const response = await fetch("/api/users/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+                phone_number: phoneNumber,
+                gender,
+                date_of_birth: dateOfBirth,
+                address: address
+            })
+        });
+        const user = await response.json();
+
+        if (!response.ok) {
+            setError(user.error);
+            return;
+        }
+
+        localStorage.setItem("user", JSON.stringify(user));
+        console.log("success");
+
         navigate("/");
     };
 
@@ -37,11 +66,11 @@ const Signup = () => {
                 <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
                 <label>Address:</label>
                 <label>Street</label>
-                <input type="date" value={street} onChange={(e) => setStreet(e.target.value)} />
+                <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
                 <label>City</label>
-                <input type="date" value={city} onChange={(e) => setCity(e.target.value)} />
+                <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
                 <label>Zip code</label>
-                <input type="date" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+                <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
                 <button>Sign up</button>
             </form>
         </div>

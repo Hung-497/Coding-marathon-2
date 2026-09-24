@@ -13,10 +13,10 @@ const generateToken = (_id) => {
 // @access  Public
 const signupUser = async (req, res) => {
   const { name, email, password, phone_number, gender, date_of_birth, address } = req.body;
-
+  console.log(name, email, password, phone_number, gender, date_of_birth, address )
   try {
     const user = await User.signup(name, email, password, phone_number, gender, date_of_birth, address);
-
+    console.log(user);
     // create a token
     const token = generateToken(user._id);
 

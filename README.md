@@ -78,3 +78,18 @@ npm run preview
 This is the jobs listing project based on the [YouTube crash course](https://youtu.be/LDB4uaJ87e0).
 
 <img src="./frontend/public/screen.png" />
+
+### Iteration 4 explaination
+```js 
+        jobSchema.set('toJSON', {
+        virtuals: true,
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v;
+            return ret;
+        }
+        });
+    ```
+
+- This code snippet basically creates a virtuals schema and change the `_id` to `id` so that the code is maintainable and easy to read.

@@ -32,6 +32,7 @@ const JobPage = () => {
       toast.error("Failed to delete the job");
     }
   };
+  
 
   useEffect(() => {
     const fetchJob = async () => {

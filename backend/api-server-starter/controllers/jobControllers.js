@@ -43,7 +43,7 @@ const getJobById = async (req, res) => {
   }
 
   try {
-    const job = await Job.findOne({ id });
+    const job = await Job.findOne({ _id:id });
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
     }
@@ -59,7 +59,7 @@ const deleteJobById = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedjob = await Job.findByIdAndDelete({
-      id,
+      _id:id,
     });
     if (!deletedjob) {
       return res.status(404).json({ message: "Job not found" });
@@ -76,7 +76,7 @@ const updateJobById = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedJob = await Job.findOneAndUpdate(
-      { id },
+      { _id:id },
       { ...req.body },
       { new: true },
     );
